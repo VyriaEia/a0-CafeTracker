@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Preference Tracker</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #f4f4f4;
+    color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.container {
+    width: 100%;
+    max-width: 780px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    padding: 35px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 30px;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full {
+    grid-column: span 2;
+}
+
+label {
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 7px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #111;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    background: #fff;
+    border-color: #111;
+}
+
+.rating-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rating-box label {
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: #fafafa;
+    transition: 0.3s ease;
+}
+
+.rating-box input {
+    display: none;
+}
+
+.rating-box label:hover {
+    border-color: #111;
+}
+
+.rating-box input:checked + span {
+    font-weight: bold;
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: 1px solid #111;
+    border-radius: 10px;
+    background: #111;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: white;
+    color: #111;
+}
+
+.result {
+    margin-top: 25px;
+    padding: 22px;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 14px;
+}
+
+.result h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.summary-card {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    margin-top: 12px;
+}
+
+.summary-card p {
+    font-size: 14px;
+    margin: 7px 0;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #111;
+}
+
+.status {
+    margin-top: 14px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+.active-input {
+    border-color: #111 !important;
+    background: #ffffff !important;
+}
+
+@media (max-width: 650px) {
+    .container {
+        padding: 25px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: span 1;
+    }
+
+    .header h1 {
+        font-size: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1 id="mainTitle">Cafe Preference Tracker</h1>
+        <p>A simple web application that records cafe drink preferences and customer feedback using JavaScript DOM methods and Google Apps Script.</p>
+    </div>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label for="customerName">Customer Name</label>
+            <input type="text" id="customerName" placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label for="cafeName">Cafe Ordered From</label>
+            <select id="cafeName">
+                <option value="">Select cafe</option>
+                <option value="Starbucks">Starbucks</option>
+                <option value="Coffee Bean">Coffee Bean</option>
+                <option value="Tim Hortons">Tim Hortons</option>
+                <option value="Local Cafe">Local Cafe</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="drinkType">Preferred Drink</label>
+            <select id="drinkType">
+                <option value="">Select drink</option>
+                <option value="Iced Coffee">Iced Coffee</option>
+                <option value="Latte">Latte</option>
+                <option value="Americano">Americano</option>
+                <option value="Caramel Macchiato">Caramel Macchiato</option>
+                <option value="Matcha Latte">Matcha Latte</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sweetness">Sweetness Level</label>
+            <select id="sweetness">
+                <option value="">Select sweetness</option>
+                <option value="Less Sweet">Less Sweet</option>
+                <option value="Regular Sweet">Regular Sweet</option>
+                <option value="Extra Sweet">Extra Sweet</option>
+            </select>
+        </div>
+
+        <div class="form-group full">
+            <label>Drink Rating</label>
+
+            <div class="rating-box">
+                <label>
+                    <input type="radio" name="rating" value="1">
+                    <span>1</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="rating" value="2">
+                    <span>2</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="rating" value="3">
+                    <span>3</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="rating" value="4">
+                    <span>4</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="rating" value="5">
+                    <span>5</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group full">
+            <label for="feedback">Feedback</label>
+            <textarea id="feedback" placeholder="Write your feedback about the drink or cafe experience"></textarea>
+        </div>
+
+    </div>
+
+    <button onclick="submitCafeRecord()">Submit Cafe Record</button>
+
+    <div class="result" id="output">
+        <h2>Submission Summary</h2>
+        <p class="status">Your submitted cafe preference will appear here.</p>
+    </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+function submitCafeRecord() {
+
+    // getElementById()
+    let name = document.getElementById("customerName").value;
+    let cafe = document.getElementById("cafeName").value;
+    let drink = document.getElementById("drinkType").value;
+    let sweetness = document.getElementById("sweetness").value;
+    let feedback = document.getElementById("feedback").value;
+
+    // getElementsByName()
+    let ratingOptions = document.getElementsByName("rating");
+    let rating = "";
+
+    // Looping structure
+    for (let i = 0; i < ratingOptions.length; i++) {
+        if (ratingOptions[i].checked) {
+            rating = ratingOptions[i].value;
+            break;
+        }
+    }
+
+    // Conditional validation
+    if (name == "" || cafe == "" || drink == "" || sweetness == "" || rating == "" || feedback == "") {
+        alert("Please complete all fields before submitting.");
+        return;
+    }
+
+    // querySelector()
+    document.querySelector("#mainTitle").textContent = "Cafe Record Submitted";
+
+    // querySelectorAll()
+    let formFields = document.querySelectorAll("input, select, textarea");
+
+    formFields.forEach(function(field) {
+        field.classList.add("active-input");
+    });
+
+    // Control structure using switch
+    let ratingMessage = "";
+
+    switch (rating) {
+        case "5":
+            ratingMessage = "Excellent cafe experience.";
+            break;
+        case "4":
+            ratingMessage = "Good cafe experience.";
+            break;
+        case "3":
+            ratingMessage = "Average cafe experience.";
+            break;
+        case "2":
+            ratingMessage = "Needs improvement.";
+            break;
+        default:
+            ratingMessage = "Poor cafe experience.";
+    }
+
+    // getElementsByClassName()
+    let resultBox = document.getElementsByClassName("result")[0];
+
+    // innerHTML
+    resultBox.innerHTML = "";
+
+    // createElement()
+    let heading = document.createElement("h2");
+    heading.textContent = "Cafe Preference Recorded";
+    heading.setAttribute("class", "highlight");
+
+    // appendChild()
+    resultBox.appendChild(heading);
+
+    let card = document.createElement("div");
+    card.setAttribute("class", "summary-card");
+
+    card.innerHTML = `
+        <p><span class="highlight">Name:</span> ${name}</p>
+        <p><span class="highlight">Cafe:</span> ${cafe}</p>
+        <p><span class="highlight">Drink:</span> ${drink}</p>
+        <p><span class="highlight">Sweetness:</span> ${sweetness}</p>
+        <p><span class="highlight">Rating:</span> ${rating}/5</p>
+        <p><span class="highlight">Feedback:</span> ${feedback}</p>
+        <p><span class="highlight">Result:</span> ${ratingMessage}</p>
+    `;
+
+    resultBox.appendChild(card);
+
+    let statusText = document.createElement("p");
+    statusText.setAttribute("class", "status");
+    statusText.textContent = "Sending record to Google Sheets...";
+    resultBox.appendChild(statusText);
+
+    let formData = {
+        name: name,
+        cafe: cafe,
+        drink: drink,
+        sweetness: sweetness,
+        rating: rating,
+        feedback: feedback,
+        ratingMessage: ratingMessage
+    };
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(function() {
+        statusText.textContent = "Record submitted successfully.";
+        statusText.classList.add("success");
+        clearForm();
+    })
+    .catch(function() {
+        statusText.textContent = "There was an error submitting the record.";
+        statusText.classList.add("error");
+    });
+}
+
+function clearForm() {
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("cafeName").value = "";
+    document.getElementById("drinkType").value = "";
+    document.getElementById("sweetness").value = "";
+    document.getElementById("feedback").value = "";
+
+    let ratingOptions = document.getElementsByName("rating");
+
+    for (let i = 0; i < ratingOptions.length; i++) {
+        ratingOptions[i].checked = false;
+    }
+}
+</script>
+
+</body>
+</html>
